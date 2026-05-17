@@ -1,10 +1,6 @@
 package com.framework.pages;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
 
 /**
  * LoginPage - Page Object Model + Fluent Interface
@@ -62,21 +58,6 @@ public class LoginPage extends BasePage {
 
     @Override
     public boolean isPageLoaded() {
-        try {
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-            boolean urlOk = wait.until(d ->
-                    d.getCurrentUrl().contains("saucedemo")
-            );
-
-            boolean uiOk = wait.until(ExpectedConditions
-                    .visibilityOfElementLocated(loginButton)
-            ).isDisplayed();
-
-            return urlOk && uiOk;
-
-        } catch (Exception e) {
-            return false;
-        }
+        return isDisplayed(loginButton);
     }
 }
