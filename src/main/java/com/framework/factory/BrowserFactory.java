@@ -12,6 +12,9 @@ import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * BrowserFactory - Factory Pattern
  * Reads browser name from config and creates the correct WebDriver
@@ -40,15 +43,26 @@ public class BrowserFactory {
 
     private static WebDriver createChrome(boolean headless) {
         WebDriverManager.chromedriver().setup();
+
         ChromeOptions options = new ChromeOptions();
+
+        // Disable password manager + weak password popup
+        Map<String, Object> prefs = new HashMap<>();
+        prefs.put("credentials_enable_service", false);
+        prefs.put("profile.password_manager_enabled", false);
+
+        options.setExperimentalOption("prefs", prefs);
+
         if (headless) {
             options.addArguments("--headless=new");
             options.addArguments("--no-sandbox");
             options.addArguments("--disable-dev-shm-usage");
             options.addArguments("--window-size=1920,1080");
         }
+
         options.addArguments("--start-maximized");
         options.addArguments("--disable-notifications");
+
         log.info("ChromeDriver is ready!");
         return new ChromeDriver(options);
     }
